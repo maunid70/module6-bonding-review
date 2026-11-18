@@ -365,7 +365,15 @@ details.qa p { padding: 10px 0 0 18px; }
 .vgroup > summary .vmeta a { color: inherit; }
 .vlist { display: grid; grid-template-columns: 1fr; gap: 4px; margin-top: 4px; }
 .vitem { background: var(--surface); padding: 22px 24px; display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 14px; align-items: start; }
-.vitem .vsum { color: var(--ink); font-size: var(--step-body); max-width: 75ch; margin-top: 8px; }
+.vitem .vsum { color: var(--ink); font-size: var(--step-body); max-width: 75ch; margin-top: 6px; }
+.vdet > summary { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.vdet .vopen { display: inline-block; margin-top: 8px; font-size: .92rem; font-weight: 500; color: var(--accent); }
+.vdet[open] .vopen { display: none; }
+.vnotes { display: grid; gap: 14px; margin-top: 16px; max-width: 75ch; }
+.vitem .vnotes p { color: var(--ink); font-size: var(--step-body); margin: 0; line-height: 1.6; }
+.vnotes h4 { margin: 0 0 4px; }
+.vex { background: var(--bg); padding: 16px 18px; }
+.vwarn { background: var(--bad-bg); padding: 16px 18px; }
 .vitem .vkey { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 4px; max-width: 75ch; }
 .vitem .n { font-family: var(--font-display); font-size: 1.7rem; line-height: 1; letter-spacing: -0.03em; }
 .vitem h3 { font-size: 1.1rem; font-weight: 600; font-family: var(--font-text); letter-spacing: 0; line-height: 1.3; }
@@ -392,9 +400,6 @@ footer.site p { max-width: 70ch; color: var(--bg); opacity: .8; font-size: .95re
 footer.site a { color: var(--bg); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
-
-<!-- Vercel Web Analytics -->
-<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 
 <header class="top">
   <div class="bar">
@@ -957,7 +962,7 @@ footer.site a { color: var(--bg); }
 <!-- ============ VIDEOS ============ -->
 <section class="view" id="v-videos" aria-labelledby="videos-h">
   <div class="wrap">
-    <div class="vhead"><h1 id="videos-h">Videos by day</h1><p>All 25 Khan Academy videos from Canvas, in the order of the class days they belong to, each with a summary. Each opens on YouTube; tick it off when you have watched it.</p></div>
+    <div class="vhead"><h1 id="videos-h">Videos by day</h1><p>All 25 Khan Academy videos from Canvas, in the order of the class days they belong to. Tap a video to read full notes written for anyone who missed or skimmed it: the explanation, a worked example, key points and a common mistake. Each opens on YouTube; tick it off when you have watched it.</p></div>
     <div class="expander" style="margin-bottom:16px"><button class="btn ghost small" type="button" data-expand="#vgroups">Open all days</button><button class="btn ghost small" type="button" data-collapse="#vgroups">Close all</button></div>
     <div id="vgroups"></div>
   </div>
@@ -1668,33 +1673,208 @@ function drawLab() {
 drawLab();
 
 /* ---------- VIDEOS ---------- */
-// Fuller summaries: [summary, [key points]]
+// Detailed video notes: o = one-line overview, p = explanation paragraphs, ex = worked example, k = key points, w = common mistake
 const VSUM = {
- 1: ["Atoms bond because they are more stable together. In an ionic bond a metal hands an electron to a nonmetal and the two opposite ions attract. In a covalent bond atoms share electrons; if one atom pulls harder the bond is polar and the molecule gets a slightly negative and a slightly positive side. In a metallic bond the metal atoms sit in a sea of delocalized electrons that move freely, which is why metals conduct.", ["Ionic: transfer, metal + nonmetal", "Covalent: sharing; unequal sharing is polar", "Metallic: sea of delocalized electrons"]],
- 2: ["Coulomb's law (force ∝ q₁q₂ / r²) predicts how strong an ionic bond is: bigger charges and a shorter distance give a stronger attraction. The worked example compares MgO with NaF. Mg²⁺ and O²⁻ have a charge product of 4 against 1 for Na⁺ and F⁻, so MgO needs much more energy to pull apart and has the higher melting point.", ["Bigger charges → stronger attraction", "Smaller ions → stronger attraction", "MgO melts higher than NaF"]],
- 3: ["Electronegativity is how strongly an atom in a covalent bond pulls the shared electrons toward itself. It is related to, but not the same as, electron affinity. The more electronegative atom takes a partial negative charge, as oxygen does in water, which explains many of water's properties.", ["Increases across a period and up a group", "F is the most electronegative element", "More electronegative atom gets δ⁻"]],
- 4: ["Uses electronegativity differences to sort bonds. Two identical atoms (C–C) share equally, a nonpolar covalent bond. A small difference gives a slightly polar bond, such as C–O where oxygen becomes partially negative. As the difference grows the bond becomes more and more polar until it is effectively ionic, as with lithium giving up its electron density.", ["ΔEN under 0.5: nonpolar covalent", "0.5 to 1.7: polar covalent", "Over 1.7: ionic"]],
- 5: ["Lattice energy is the energy needed to pull the ions of an ionic solid infinitely far apart, measured in kJ/mol. It is the ionic version of bond energy and comes straight from Coulomb's law. It rises with ion charge and falls as the ions get bigger, so it can be used to rank melting points.", ["Charge has the bigger effect", "Larger ions → smaller lattice energy", "Larger lattice energy → higher melting point"]],
- 6: ["Walks through the Lewis-structure method: count total valence electrons (adjusting for charge), put the least electronegative atom in the centre, connect with single bonds, fill the outer atoms' octets, put leftovers on the central atom, and make double or triple bonds if the centre still lacks an octet. Examples include SiF₄, XeF₂ (an expanded octet) and an ion.", ["Count valence electrons first", "Least electronegative atom in the centre", "Period 3 and below can exceed an octet"]],
- 7: ["Draws sulfate (SO₄²⁻, 32 valence electrons) and then calculates the formal charge on each atom: valence electrons minus nonbonding electrons minus half the bonding electrons. The best structure keeps formal charges as close to zero as possible and puts negative charge on the more electronegative atom, even if that needs an expanded octet on sulfur.", ["FC = V − N − ½B", "Best structure: charges near zero", "Negative charge on the more electronegative atom"]],
- 8: ["Nitrate (NO₃⁻) has 24 valence electrons, and the double bond can be drawn to any of the three oxygens, giving three resonance structures. The real ion is a hybrid of all three. The evidence: all three N–O bonds are the same length, between a single and a double bond.", ["Resonance = more than one valid structure", "The real molecule is the average", "Electrons are delocalized"]],
- 9: ["Combines dot structures and VSEPR shapes to decide whether a molecule is polar. Draw each bond dipole as an arrow toward the more electronegative atom, then add the arrows as vectors. HCl is polar. CO₂ is linear, so its two dipoles cancel to zero, and symmetric molecules like CCl₄ cancel too. (Canvas titles this video \"Electronegativity and Bonding\", but it is about molecular polarity.)", ["Molecular dipole = vector sum of bond dipoles", "CO₂ and CCl₄ cancel: nonpolar", "Use wedges and dashes for 3D shapes"]],
- 10: ["An AP free-response question: draw the Lewis structures of ethene and ethanol with all lone pairs, then estimate the C–O–H bond angle in ethanol. Oxygen has four electron domains (two bonds and two lone pairs), so the angle is close to tetrahedral but a little under 109.5°, the same reasoning as water's 104.5°.", ["Count domains on the atom in question", "Lone pairs squeeze the angle below 109.5°", "Same idea as water's bent shape"]],
- 11: ["Uses methane and ethane. Carbon's one 2s and three 2p orbitals mix into four equal sp³ hybrid orbitals, each with one electron and 25% s character. That lets carbon form four identical bonds pointing to the corners of a tetrahedron at 109.5°.", ["s + 3p → four sp³ orbitals", "25% s character", "Tetrahedral, 109.5°"]],
- 12: ["Steric number is the number of σ bonds plus lone pairs on an atom, and it equals the number of hybrid orbitals. Methane has 4 (sp³, tetrahedral, 109.5°). Ammonia also has 4, three bonds and a lone pair, so it is sp³ but trigonal pyramidal, with the angle squeezed to about 107° because the lone pair repels more. Water, with two lone pairs, is bent at about 104.5°.", ["Steric number = σ bonds + lone pairs", "4 → sp³ regardless of lone pairs", "NH₃ 107°, H₂O 104.5°"]],
- 13: ["Each carbon in ethene bonds to three atoms. One s and two p orbitals make three sp² orbitals (33% s character) in a flat triangle at 120°, leaving one unhybridized p orbital. Head-on overlap makes the σ bonds; sideways overlap of the leftover p orbitals makes the π bond in C=C. More s character holds electrons closer to the nucleus and shortens the bond.", ["s + 2p → three sp², one p left over", "Trigonal planar, 120°", "Double bond = 1σ + 1π"]],
- 14: ["A carbon bonded to two atoms, as in ethyne (acetylene) or HCN, mixes one s and one p into two sp orbitals (50% s character) at 180°. The two unhybridized p orbitals overlap sideways to make two π bonds, so a triple bond is one σ plus two π. Compares s character: sp³ 25%, sp² 33%, sp 50%.", ["s + p → two sp, two p left over", "Linear, 180°", "Triple bond = 1σ + 2π"]],
- 15: ["Goes through an organic molecule atom by atom. Fast rule: an atom with only single bonds is sp³ (tetrahedral, 109.5°). Otherwise count the steric number: 2 → sp (linear), 3 → sp² (trigonal planar), 4 → sp³. Good practice for the hybridization, bond-angle and σ/π questions like #23 (aspartame).", ["All single bonds → sp³", "One double bond → sp²", "Triple bond or two doubles → sp"]],
- 16: ["Bond order is the number of bonds between two atoms: 1 for single, 2 for double, 3 for triple. Higher bond order means a shorter, stronger bond. For resonance structures you average: carbonate has three equal resonance structures, so each C–O bond order is 1⅓, between a single and double bond in length and strength.", ["Higher order → shorter and stronger", "Triple < double < single in length", "Carbonate C–O = 4/3"]],
- 17: ["Solids, liquids and gases come from the balance between particles' kinetic energy and their attraction to each other. Temperature measures average kinetic energy. Liquid molecules have enough energy to slide past each other but not to escape. Polar molecules like water attract through partial charges and hydrogen bonds, which also explains why ice is less dense than liquid water.", ["State = kinetic energy vs attraction", "Temperature = average kinetic energy", "Ice floats because of hydrogen bonding"]],
- 18: ["In a closed container some liquid evaporates until the vapor above it reaches equilibrium; the pressure it exerts is the vapor pressure. Vapor pressure rises with temperature. A liquid boils when its vapor pressure equals the surrounding pressure (760 torr at 1 atm). Liquids with weak intermolecular forces, like the propane in a lighter, have high vapor pressure and are volatile.", ["Vapor pressure rises with temperature", "Boils when VP = outside pressure", "Weaker IMFs → higher VP, more volatile"]],
- 19: ["Even neutral, nonpolar atoms and molecules attract each other. At any instant the electrons can be unevenly spread, creating a temporary dipole that induces a dipole in a neighbour. That attraction is the London dispersion force. Bigger molecules have larger, more polarizable electron clouds and stronger LDF, and more surface contact makes it stronger still.", ["Present in every substance", "Larger electron cloud → stronger LDF", "More surface area → stronger LDF"]],
- 20: ["Compares propane and acetaldehyde, which have similar molar masses. Propane is nonpolar and boils at −42.1 °C. Acetaldehyde has a permanent dipole, so dipole–dipole forces add to its LDF and it boils much higher. Boiling point reflects how much energy it takes to overcome the intermolecular forces.", ["Permanent dipoles attract δ⁺ to δ⁻", "Similar mass: the polar one boils higher", "Dipole–dipole adds on top of LDF"]],
- 21: ["When H is bonded to N, O or F, the bond is so polar that the partially positive H is strongly attracted to a lone pair on N, O or F of a neighbouring molecule: a hydrogen bond. On a graph of hydride boiling points, boiling point normally rises with molar mass (LDF), but NH₃, H₂O and HF sit far above the trend because they hydrogen bond.", ["H bonded to N, O or F", "Strongest dipole–dipole force", "NH₃, H₂O, HF boil far above the trend"]],
- 22: ["A liquid boils when its molecules have enough energy to overcome their attractions. Longer carbon chains boil higher (more LDF). Branching lowers the boiling point because it reduces surface contact: pentane boils at about 36 °C, neopentane at 9.5 °C. Alcohols boil higher than alkanes or ethers of similar size because their O–H groups hydrogen bond.", ["More carbons → higher boiling point", "More branching → lower boiling point", "O–H groups → hydrogen bonding"]],
- 23: ["\"Like dissolves like.\" Water is polar and dissolves polar and hydrogen-bonding compounds; nonpolar compounds such as naphthalene need a nonpolar solvent. Ethanol has a polar, hydrophilic –OH end and a small hydrophobic carbon chain; the chain is too small to win, so ethanol dissolves in water. Longer chains make alcohols less water-soluble.", ["Polar dissolves polar, nonpolar dissolves nonpolar", "–OH is hydrophilic, carbon chains hydrophobic", "Longer chain → less soluble in water"]],
- 24: ["Test strategy for boiling-point multiple choice. A higher boiling point means stronger intermolecular forces to overcome. Compare bond polarity (C–F is more polar than C–H) and electron-cloud size (more LDF). Cross out any answer that talks about breaking covalent bonds, because boiling never breaks the bonds inside a molecule.", ["Higher bp = stronger IMFs", "Compare polarity and size", "Eliminate answers about covalent bonds"]],
- 25: ["From the ethanol-dehydration experiment: ethene gas and leftover ethanol bubble through water. Ethanol is polar and hydrogen bonds with water, so it dissolves; nonpolar ethene does not. A model answer for explaining solubility in terms of polarity and intermolecular forces.", ["Ethanol hydrogen bonds with water", "Ethene is nonpolar and stays a gas", "Explain solubility with IMFs"]]
+ 1: { o: "The three ways atoms hold together, and how to tell which one you are looking at.",
+  p: ["Atoms bond because the bonded arrangement has lower energy than the separate atoms. Which kind of bond forms depends on how tightly each atom holds its electrons, which is what electronegativity measures.",
+      "<b>Ionic bonds</b> form between a metal and a nonmetal. The metal (for example Na, which loses its electron easily) gives its valence electron to the nonmetal (for example Cl, which gains one readily). The resulting Na⁺ and Cl⁻ attract in every direction, so they stack into a crystal lattice instead of forming separate molecules. That is why ionic solids have high melting points, are brittle, and conduct electricity only when melted or dissolved.",
+      "<b>Covalent bonds</b> form between nonmetals, which share pairs of electrons. When both atoms pull equally (H₂, Cl₂) the bond is nonpolar. When one pulls harder, the bond is polar: in water, oxygen pulls the shared electrons toward itself and becomes partially negative (δ⁻) while the hydrogens become δ⁺. Covalent bonding makes discrete molecules.",
+      "<b>Metallic bonds</b> hold metal atoms together. Each atom releases its valence electrons into a shared \"sea\" of delocalized electrons that moves freely around a lattice of metal cations. Mobile electrons explain why metals conduct electricity and heat, and why they bend instead of shattering: layers of atoms can slide without breaking the bonding."],
+  ex: "Classify NaCl, H₂O, Cu and CO₂. NaCl: metal + nonmetal, ionic. H₂O: two nonmetals sharing unequally, polar covalent. Cu: a metal on its own, metallic. CO₂: nonmetals sharing, covalent (polar bonds, but the molecule is nonpolar because it is linear).",
+  k: ["Ionic: electrons transferred, metal + nonmetal, crystal lattice", "Covalent: electrons shared, nonmetals, molecules; polar if shared unequally", "Metallic: sea of delocalized electrons around metal cations"],
+  w: "There is no such thing as a \"NaCl molecule\". Ionic compounds are lattices; NaCl is a formula unit giving the ratio of ions." },
+ 2: { o: "Coulomb's law predicts how strongly ions attract, which lets you rank ionic compounds by melting point.",
+  p: ["Coulomb's law says the attraction between two charges grows with the size of the charges and shrinks with the distance between them. The video writes it as force, F = k·q₁q₂ / r². Your notes write the energy version, E ∝ Q₁Q₂ / d. Both give the same trends.",
+      "For an ionic compound, q₁ and q₂ are the ion charges and r (or d) is the distance between the ion centres, roughly the cation radius plus the anion radius. So there are two levers: bigger charges mean stronger attraction, and smaller ions (shorter distance) mean stronger attraction.",
+      "Charge is usually the bigger lever. Charges change in whole-number steps (1, 2, 3), so the product q₁q₂ can jump from 1 to 4 to 9. Ion sizes only change by a few tens of percent between neighbouring compounds.",
+      "The video's comparison: MgO has Mg²⁺ and O²⁻ (charge product 2 × 2 = 4); NaF has Na⁺ and F⁻ (1 × 1 = 1). The ions are similar in size, so MgO's attraction is roughly four times stronger. Melting an ionic solid means pulling the ions apart, so MgO melts at about 2850 °C against roughly 990 °C for NaF."],
+  ex: "Rank MgO, NaCl and KBr by melting point. MgO has 2+/2− charges, so it is highest. NaCl and KBr both have 1+/1− charges, so size decides: K⁺ and Br⁻ are bigger than Na⁺ and Cl⁻, so KBr is lowest. Order: MgO > NaCl > KBr.",
+  k: ["Attraction ∝ (charge × charge) / distance", "Compare charges first, then ion size", "Stronger attraction → higher melting point"],
+  w: "Do not compare atomic masses. A heavier ionic compound is not automatically stronger; larger ions actually sit farther apart and attract less." },
+ 3: { o: "What electronegativity means, how it differs from electron affinity, and its periodic trend.",
+  p: ["Electronegativity (EN) is how strongly an atom pulls on the shared electrons in a bond with another atom. It is a relative scale with no units; on the Pauling scale used in class it runs from about 0.7 (Cs, Fr) to 4.0 (F).",
+      "It is not the same thing as electron affinity. Electron affinity is a measured energy change (kJ/mol) when an isolated gaseous atom gains an electron. Electronegativity describes an atom that is already in a bond. The two follow similar trends, which is why they are easy to mix up.",
+      "<b>Trend:</b> EN increases from left to right across a period, because the nuclear charge rises while the electrons stay in the same shell, so they are pulled harder. EN decreases down a group, because the valence electrons are in shells farther from the nucleus and more shielded. The top right corner (F 4.0, O 3.5, N and Cl 3.0) is the most electronegative region. Noble gases are usually left off because they rarely bond.",
+      "In a bond, the more electronegative atom takes a partial negative charge (δ⁻) and the other a partial positive charge (δ⁺). In water, O (3.5) pulls electron density away from each H (2.1). Combined with water's bent shape, this makes the whole molecule polar, which is the root of hydrogen bonding, water's high boiling point and its ability to dissolve salts."],
+  ex: "Which atom is δ⁻ in a C–Cl bond? Cl (3.0) beats C (2.5), so Cl is δ⁻ and C is δ⁺. In an N–H bond, N (3.0) beats H (2.1), so N is δ⁻.",
+  k: ["EN = pull on shared electrons in a bond (no units)", "Rises across a period, falls down a group; F is highest", "More electronegative atom gets δ⁻"],
+  w: "The EN trend runs opposite to atomic size. Small atoms near the top right are the most electronegative, not big ones." },
+ 4: { o: "Using the electronegativity difference (ΔEN) to decide whether a bond is nonpolar, polar or ionic.",
+  p: ["Subtract the two electronegativities to get ΔEN, then place the bond on a continuum. Your teacher's cutoffs: under 0.5 is nonpolar covalent, 0.5 to 1.7 is polar covalent, over 1.7 is ionic.",
+      "Identical atoms (C–C, Cl–Cl) have ΔEN = 0 and share perfectly. C–H has ΔEN 0.4, close enough to nonpolar that hydrocarbons behave as nonpolar molecules. C–O (1.0) and O–H (1.4) are clearly polar, with O carrying δ⁻. At the far end, Li–F (3.0) is ionic: lithium has lost essentially all of its share of the electrons.",
+      "Chemists draw polar bonds with δ⁺ and δ⁻ labels or with a dipole arrow. The arrow points toward the δ⁻ (more electronegative) atom and has a small cross at the δ⁺ end.",
+      "There is no sharp boundary between bond types; the cutoffs are guides. Some books use 2.0 instead of 1.7 for ionic, so stick with your teacher's numbers on the test."],
+  ex: "Classify each bond: Cl–Cl (0, nonpolar), H–Cl (0.9, polar covalent), Na–Cl (2.0, ionic), C–S (0, nonpolar), Al–Cl (1.5, polar covalent).",
+  k: ["ΔEN < 0.5 nonpolar; 0.5–1.7 polar; > 1.7 ionic", "Dipole arrow points to the δ⁻ atom, cross at δ⁺", "Bond types form a continuum"],
+  w: "\"Metal + nonmetal = ionic\" is a shortcut, not a rule. Al–Cl (1.5) and Cu–O (1.7) come out polar covalent by ΔEN, and the practice key treats Cu–O that way." },
+ 5: { o: "Lattice energy: how much energy holds an ionic crystal together, and how charge and size change it.",
+  p: ["Lattice energy is the energy needed to pull one mole of an ionic solid apart into separate gaseous ions, measured in kJ/mol. It is the ionic version of bond energy. For NaCl it is 788 kJ/mol.",
+      "It comes straight from Coulomb's law, so it is proportional to Q₁Q₂ / (r₊ + r₋). Higher charges give much larger lattice energies; smaller ions give larger lattice energies. MgO (2+/2−) has a lattice energy of about 3800 kJ/mol, nearly five times NaCl's. Within one charge type, smaller ions win: LiF (about 1030 kJ/mol) is larger than NaCl.",
+      "Lattice energy explains why ionic compounds exist at all. Turning Na and Cl atoms into ions costs a net +147 kJ/mol, but the 788 kJ/mol released when the ions pack into a crystal more than pays for it. A Born–Haber cycle adds these steps up with Hess's law.",
+      "Larger lattice energy means the ions are held more tightly, so the melting point is higher."],
+  ex: "Rank KCl, CaO and NaCl by lattice energy. CaO has 2+/2− charges, so it is largest. NaCl and KCl share charges, and Na⁺ is smaller than K⁺, so NaCl is next. Order: CaO > NaCl > KCl.",
+  k: ["Energy to separate 1 mol of ionic solid into gaseous ions", "Up with charge (biggest effect), down with ion size", "Larger lattice energy → higher melting point"],
+  w: "Watch the sign. Defined as separating the ions it is positive (+788); defined as forming the solid it is negative (−788). Both describe the same attraction." },
+ 6: { o: "The step-by-step method for drawing a Lewis structure, including expanded octets and ions.",
+  p: ["<b>Step 1:</b> add up the valence electrons of every atom. For a negative ion add one electron per charge; for a positive ion subtract one.",
+      "<b>Step 2:</b> put the least electronegative atom in the centre (never H, which can only make one bond) and connect each outer atom to it with a single bond. Each bond uses 2 electrons.",
+      "<b>Step 3:</b> give the outer atoms full octets with lone pairs (H only needs 2). <b>Step 4:</b> put any electrons left over on the central atom. <b>Step 5:</b> if the central atom still has fewer than 8, move lone pairs from outer atoms in to make double or triple bonds.",
+      "Atoms in period 3 and below can hold more than 8 electrons (an expanded octet) because they have empty d orbitals. XeF₂ has 22 valence electrons: two Xe–F bonds use 4, the F lone pairs use 12, and the last 6 sit on Xe as three lone pairs, giving Xe 10 electrons. SiF₄ (32 electrons) works out with four single bonds and three lone pairs on each F."],
+  ex: "CO₂: 4 + 6 + 6 = 16 electrons. O–C–O uses 4; filling both O octets uses 12 more, so all 16 are used but C has only 4. Move one lone pair from each O into a bond: O=C=O, and every atom has an octet.",
+  k: ["Count valence electrons, adjusting for charge", "Least electronegative atom in the centre, never H", "Fix a short central atom with multiple bonds", "Period 3+ atoms may exceed an octet"],
+  w: "Forgetting the ion's charge in the electron count is the most common error. For ions, also put brackets around the structure with the charge outside." },
+ 7: { o: "Calculating formal charge and using it to choose the best Lewis structure.",
+  p: ["Formal charge (FC) is bookkeeping that shows whether an atom \"owns\" more or fewer electrons in a structure than it has as a free atom: FC = valence electrons − nonbonding electrons − ½(bonding electrons). Count each lone-pair electron fully and half of each bond's electrons.",
+      "The video works through sulfate, SO₄²⁻, with 32 valence electrons. With four S–O single bonds, every O has three lone pairs (FC −1 each) and S has FC +2. If two of the bonds become S=O double bonds, S drops to 0, the two double-bonded O atoms go to 0, and only two O atoms keep −1.",
+      "How to pick the best structure: the formal charges must add up to the overall charge (−2 for sulfate, a good self-check); keep formal charges as close to zero as possible; put any negative formal charge on the more electronegative atom; and avoid placing like charges next to each other.",
+      "Because the two-double-bond sulfate structure has smaller formal charges, the video prefers it, even though it gives sulfur 12 electrons. That expanded octet is allowed for sulfur, a period 3 element."],
+  ex: "CO₂ drawn as O≡C–O: the triple-bonded O has FC 6 − 2 − 3 = +1 and the single-bonded O has 6 − 6 − 1 = −1. Drawn as O=C=O, every atom is 0. The all-zero structure is better.",
+  k: ["FC = V − N − ½B", "Formal charges must sum to the overall charge", "Best: charges near zero, negative charge on the more electronegative atom"],
+  w: "Formal charge is not the real charge on the atom; real charge distribution comes from electronegativity. And only period 3+ atoms may expand an octet to lower formal charge." },
+ 8: { o: "Resonance: when one Lewis structure isn't enough, and what the real molecule looks like.",
+  p: ["Nitrate, NO₃⁻, has 24 valence electrons. A valid structure puts N in the centre with one N=O double bond and two N–O single bonds. But the double bond could go to any of the three oxygens equally well, so there are three equivalent structures, drawn with double-headed arrows (↔) between them.",
+      "These are resonance structures. The real ion is not flipping between them; it is a single resonance hybrid, a blend of all three. The pair of electrons in the \"double bond\" is delocalized, spread over all three N–O bonds at once.",
+      "The evidence is experimental: all three N–O bonds in nitrate are the same length, shorter than a typical N–O single bond and longer than an N=O double bond. Each has a bond order of 4/3 (four bonding pairs shared over three bonds).",
+      "Other common resonance examples: ozone (O₃, bond order 3/2), carbonate (CO₃²⁻, 4/3), sulfur dioxide and benzene."],
+  ex: "Carbonate, CO₃²⁻: 4 + 18 + 2 = 24 electrons. One C=O and two C–O (each single-bonded O carrying −1). The double bond can sit on any of the three O atoms, so there are three resonance structures and each C–O bond order is 4/3.",
+  k: ["Several equally good structures → resonance", "Real molecule = average (hybrid) with delocalized electrons", "Resonance bonds are equal in length, with fractional bond order"],
+  w: "Resonance structures differ only in where electrons (lone pairs and π bonds) are drawn. Atoms never move between resonance structures, and the ↔ arrow does not mean an equilibrium." },
+ 9: { o: "Deciding whether a whole molecule is polar from its bond dipoles and its 3D shape. (Canvas calls this one \"Electronegativity and Bonding\".)",
+  p: ["Molecular polarity takes two steps. First, are any bonds polar? If not, the molecule is nonpolar. Second, if there are polar bonds, does the shape let their dipoles cancel?",
+      "Draw each bond dipole as an arrow toward the more electronegative atom, then add the arrows as vectors (direction matters, not just size). If they cancel, the molecule has no net dipole and is nonpolar; if they leave a net arrow, it is polar.",
+      "HCl has one polar bond, so it is polar. CO₂ has two polar C=O bonds pointing in exactly opposite directions because the molecule is linear, so they cancel: nonpolar. CCl₄ has four polar bonds arranged symmetrically in a tetrahedron, which also cancel. Water has two polar O–H bonds, but its bent shape means they add up instead of cancelling, so water is polar.",
+      "Symmetric shapes with identical outer atoms always cancel: linear AX₂, trigonal planar AX₃, tetrahedral AX₄, trigonal bipyramidal AX₅, octahedral AX₆, and the lone-pair shapes linear AX₂E₃ and square planar AX₄E₂. The video uses wedges (bond coming toward you) and dashes (going away) to draw the 3D shapes."],
+  ex: "Is CH₂Cl₂ polar? It is tetrahedral, but two of the outer atoms are Cl and two are H, so the dipoles are unequal and do not cancel: polar. BF₃ (trigonal planar, three identical F) is nonpolar. NH₃ (pyramidal) is polar.",
+  k: ["Polar bonds + unsymmetric shape = polar molecule", "Molecular dipole = vector sum of bond dipoles", "Swapping one outer atom can break the symmetry"],
+  w: "Polar bonds do not guarantee a polar molecule. CO₂, CCl₄ and BF₃ all have polar bonds but are nonpolar." },
+ 10: { o: "An AP free-response question: Lewis structures for ethene and ethanol, and the C–O–H bond angle.",
+  p: ["Ethene, C₂H₄, has 12 valence electrons: a C=C double bond and four C–H single bonds, with no lone pairs. Each carbon has three electron domains and is trigonal planar.",
+      "Ethanol, C₂H₅OH, has 20 valence electrons: C–C, C–O and O–H single bonds, five C–H bonds, and two lone pairs on the oxygen. The FRQ requires all lone pairs to be drawn.",
+      "For the C–O–H angle, look at the oxygen. It has four electron domains (two bonds and two lone pairs), so its electron geometry is tetrahedral. The two lone pairs repel more strongly than bonding pairs and squeeze the bond angle below 109.5°, to about 105°, just like the angle in water.",
+      "A full-credit answer names the number of domains around O, the tetrahedral electron arrangement, and the extra repulsion from the lone pairs."],
+  ex: "Estimate the H–N–H angle in ammonia using the same reasoning: N has 4 domains (3 bonds + 1 lone pair), tetrahedral electron geometry, one lone pair compresses the angle to about 107°.",
+  k: ["Always draw every lone pair in an FRQ", "Count domains on the atom at the centre of the angle", "Lone pairs compress angles below the ideal value"],
+  w: "Do not answer 180° because O has \"two bonds\". The two lone pairs count as domains too." },
+ 11: { o: "Why carbon forms four identical bonds at 109.5°: sp³ hybridization in methane and ethane.",
+  p: ["Carbon's ground-state configuration (2s² 2p²) has only two unpaired electrons, in p orbitals that sit at 90° to each other. That would predict two bonds at 90°, but methane actually has four identical C–H bonds at 109.5°.",
+      "Hybridization fixes this. Carbon's one 2s orbital and three 2p orbitals mix to make four equivalent sp³ hybrid orbitals. Each is 25% s character and 75% p, holds one electron, and points to a corner of a tetrahedron.",
+      "In methane, each sp³ orbital overlaps head-on with a hydrogen 1s orbital to make a σ bond. In ethane, the C–C bond is an sp³–sp³ overlap, and the two halves of the molecule can rotate freely around that single bond.",
+      "The same hybridization applies whenever an atom has four electron domains, including lone pairs: N in NH₃ and O in H₂O are also sp³, with lone pairs sitting in some of the hybrid orbitals."],
+  ex: "What is the hybridization of C in CCl₄ and of N in NH₃? Both have four electron domains (CCl₄: four bonds; NH₃: three bonds and a lone pair), so both are sp³.",
+  k: ["s + 3p → four sp³ orbitals (25% s)", "Tetrahedral arrangement, 109.5°", "Any atom with 4 domains is sp³, lone pairs included"],
+  w: "Hybridization depends on electron domains, not on how many atoms are attached. NH₃ has only three bonds but is still sp³." },
+ 12: { o: "Steric number: the quick count that gives an atom's hybridization and shape.",
+  p: ["Steric number = number of σ bonds (atoms attached) + number of lone pairs on the atom. It equals the number of hybrid orbitals the atom uses.",
+      "Steric number 2 → sp (linear, 180°); 3 → sp² (trigonal planar, 120°); 4 → sp³ (tetrahedral, 109.5°). For expanded octets, 5 → sp³d and 6 → sp³d².",
+      "Methane: 4 σ bonds + 0 lone pairs = 4, sp³, tetrahedral, 109.5°. Ammonia: 3 σ bonds + 1 lone pair = 4, still sp³, but the molecular shape is trigonal pyramidal and the angle shrinks to about 107° because the lone pair repels harder. Water: 2 σ bonds + 2 lone pairs = 4, sp³, bent, about 104.5°.",
+      "A double or triple bond counts as only one σ bond, because only one of its bonds is σ."],
+  ex: "CO₂'s carbon: 2 σ bonds (the π bonds don't count) + 0 lone pairs = 2, so sp and linear. SO₂'s sulfur: 2 σ bonds + 1 lone pair = 3, so sp² and bent.",
+  k: ["Steric number = σ bonds + lone pairs", "2 sp, 3 sp², 4 sp³, 5 sp³d, 6 sp³d²", "More lone pairs → smaller angles at the same steric number"],
+  w: "Do not count π bonds, and only count lone pairs on the atom you are asking about, not on its neighbours." },
+ 13: { o: "sp² hybridization in ethene, and how σ and π bonds make a double bond.",
+  p: ["Each carbon in ethene is bonded to three atoms (one C, two H) and has no lone pairs, so its steric number is 3. One s and two p orbitals mix into three sp² hybrids (33% s character) that lie flat at 120°. One p orbital is left over, unhybridized, sticking straight up and down out of that plane.",
+      "The sp² orbitals make the σ framework: an sp²–sp² overlap for the C–C σ bond and sp²–1s overlaps for the four C–H bonds. The leftover p orbitals on the two carbons are parallel, so they overlap side by side, above and below the plane, to make a π bond.",
+      "So the C=C double bond is one σ bond plus one π bond. Because the π overlap only works when the p orbitals stay parallel, the molecule is flat and cannot rotate around the double bond without breaking the π bond.",
+      "More s character pulls electrons closer to the nucleus, which helps make bonds shorter. Together with the extra π bond, this is why C=C is shorter and stronger than C–C."],
+  ex: "Formaldehyde, H₂CO: carbon has 3 σ bonds and no lone pairs (sp²); oxygen has 1 σ bond and 2 lone pairs, steric number 3 (sp²). The C=O is 1σ + 1π.",
+  k: ["s + 2p → three sp² (33% s), one p left over", "Trigonal planar, 120°, flat molecule", "Double bond = 1σ + 1π; no rotation around it"],
+  w: "A π bond is one bond with two lobes (above and below the plane), not two separate bonds." },
+ 14: { o: "sp hybridization in ethyne and HCN, and how a triple bond is built.",
+  p: ["A carbon bonded to only two atoms with no lone pairs (steric number 2) mixes one s and one p orbital into two sp hybrids (50% s character) pointing in opposite directions, 180° apart. The molecule is linear.",
+      "That leaves two unhybridized p orbitals on each carbon, at right angles to each other. In ethyne (acetylene), HC≡CH, the sp orbitals make the C–H and C–C σ bonds, and the two pairs of p orbitals overlap sideways to make two π bonds. A triple bond is therefore 1σ + 2π.",
+      "HCN works the same way: carbon is sp, and nitrogen (1 σ bond + 1 lone pair) is also sp. In CO₂, carbon has two double bonds and is also sp, with its two π bonds in perpendicular planes.",
+      "Comparing s character: sp³ 25%, sp² 33%, sp 50%. More s character means shorter bonds, so carbon–carbon bonds shrink from C–C (about 154 pm) to C=C (about 134 pm) to C≡C (about 120 pm)."],
+  ex: "Count σ and π bonds in propyne, H–C≡C–CH₃: one H–C, the C≡C (1σ + 2π), one C–C and three C–H. Total 6σ and 2π.",
+  k: ["s + p → two sp (50% s), two p left over", "Linear, 180°", "Triple bond = 1σ + 2π; also sp: an atom with two double bonds"],
+  w: "Hybridization is about the atom, not the bond: CO₂'s carbon has no triple bond but is still sp." },
+ 15: { o: "Practice assigning hybridization to every atom in an organic molecule, fast.",
+  p: ["For each atom other than hydrogen, count σ bonds plus lone pairs. Hydrogen is never hybridized; it bonds with its 1s orbital.",
+      "Shortcuts by bond pattern, which the video uses: only single bonds → sp³ (tetrahedral, 109.5°); one double bond → sp² (trigonal planar, 120°); a triple bond or two double bonds → sp (linear, 180°).",
+      "The same rules handle O and N with their lone pairs. Oxygen in C=O: 1 σ + 2 lone pairs = 3, sp². Oxygen in an –OH or ether: 2 σ + 2 lone pairs = 4, sp³. Nitrogen in an amine (–NH₂): 3 σ + 1 lone pair = 4, sp³. Nitrogen in a nitrile (C≡N): 1 σ + 1 lone pair = 2, sp.",
+      "For σ/π counts, every bond line has exactly one σ bond, and every extra line in a double or triple bond is a π bond. This is the skill behind practice #23 (aspartame) and #28."],
+  ex: "Acetic acid, CH₃COOH: the CH₃ carbon is sp³; the C=O carbon is sp²; the C=O oxygen is sp²; the O–H oxygen is sp³. Bonds: C–C, C=O, C–O, O–H and three C–H, for 7σ and 1π.",
+  k: ["All single → sp³; one double → sp²; triple or two doubles → sp", "Count lone pairs on O and N", "Each bond line = 1σ; extra lines = π"],
+  w: "Do not assign a hybridization to H atoms, and do not forget the lone pairs on O and N when counting." },
+ 16: { o: "How bond order connects to bond length and bond strength, including fractional bond orders.",
+  p: ["Bond order is the number of electron pairs shared between two atoms: 1 for a single bond, 2 for a double, 3 for a triple.",
+      "Higher bond order means more electron density holding the nuclei together, so the bond is shorter and stronger. For carbon–carbon bonds: C–C about 154 pm and 348 kJ/mol, C=C about 134 pm and 614 kJ/mol, C≡C about 120 pm and 839 kJ/mol. Length and strength always move in opposite directions.",
+      "A double bond is not twice as strong as a single bond, because the extra π bond is weaker than the σ bond.",
+      "With resonance, average the bond order across the equivalent structures. Carbonate has three resonance structures with one C=O each: 4 bonding pairs over 3 bonds gives 4/3, about 1.33. Its C–O bonds are all the same length, between a single and a double. Ozone is 3/2, and nitrate is 4/3."],
+  ex: "Rank the N–N bonds in N₂ (N≡N), N₂H₂ (N=N) and N₂H₄ (N–N) from shortest to longest: N₂ < N₂H₂ < N₂H₄. Strongest to weakest follows the same order.",
+  k: ["Bond order = shared pairs between two atoms", "Higher order → shorter and stronger", "Resonance → average (fractional) bond order"],
+  w: "Do not call a resonance bond \"sometimes single, sometimes double\". It is always the same in-between bond, with a fractional bond order." },
+ 17: { o: "Why substances are solids, liquids or gases, and why ice floats.",
+  p: ["The state of a substance is a contest between kinetic energy, which pulls particles apart, and intermolecular attractions, which hold them together. Temperature measures the average kinetic energy of the particles.",
+      "In a gas, kinetic energy wins: particles are far apart and move freely. In a liquid, particles are touching and have enough energy to slide past each other but not to escape. In a solid, attractions win and particles vibrate around fixed positions.",
+      "Melting and boiling overcome intermolecular forces; they do not break the covalent bonds inside molecules. While a phase change is happening the temperature stays constant, because the added energy goes into separating particles rather than speeding them up.",
+      "Water's polar molecules attract through hydrogen bonds. In ice, each molecule hydrogen bonds to four neighbours in an open hexagonal lattice with a lot of empty space. When ice melts, that lattice partly collapses and the molecules pack closer, so liquid water is denser than ice. That is why ice floats."],
+  ex: "Why does a pot of boiling water stay at 100 °C even on a high flame? The extra heat goes into breaking hydrogen bonds to turn liquid into vapor, not into raising the temperature.",
+  k: ["State = kinetic energy vs attractions", "Temperature = average kinetic energy", "Phase changes break intermolecular forces, not covalent bonds", "Ice is less dense than water because of its hydrogen-bonded lattice"],
+  w: "Boiling water does not split it into H₂ and O₂. The H₂O molecules stay intact; only the attractions between them are overcome." },
+ 18: { o: "What vapor pressure is, why it rises with temperature, and how it defines boiling.",
+  p: ["In a closed container some liquid molecules have enough energy to escape into the gas phase. As vapor builds up, some molecules condense back. Eventually evaporation and condensation happen at the same rate (dynamic equilibrium), and the pressure of the vapor at that point is the vapor pressure.",
+      "Vapor pressure does not depend on how much liquid there is or on the size of the container. It depends only on the substance (its intermolecular forces) and the temperature.",
+      "Raising the temperature gives a bigger fraction of molecules enough energy to escape, so vapor pressure rises, and it rises steeply rather than in a straight line. On the vapor-pressure vs temperature graph, each liquid has its own upward curve.",
+      "A liquid boils when its vapor pressure equals the pressure above it, because bubbles of vapor can then form inside the liquid. The normal boiling point is the temperature where vapor pressure reaches 760 torr (1 atm). At high altitude the air pressure is lower, so water boils below 100 °C; a pressure cooker raises the pressure and the boiling point.",
+      "Volatile liquids have weak intermolecular forces, high vapor pressure and low boiling points. The video's example is propane in a lighter, which stays liquid only because it is under pressure."],
+  ex: "At 25 °C, diethyl ether's vapor pressure is roughly 500 torr while water's is only about 24 torr. Ether has much weaker intermolecular forces (no hydrogen bonding), so it evaporates far more readily and boils at just 35 °C.",
+  k: ["Vapor pressure = pressure of vapor at equilibrium with its liquid", "Depends only on temperature and IMFs", "Boils when vapor pressure = outside pressure; normal bp at 760 torr", "Weaker IMFs → higher vapor pressure"],
+  w: "Evaporation and boiling are different. Evaporation happens at the surface at any temperature; boiling happens throughout the liquid only when vapor pressure equals outside pressure." },
+ 19: { o: "London dispersion forces: the attraction every substance has, and what makes it stronger.",
+  p: ["Even nonpolar atoms and molecules attract each other. Electrons are always moving, so at any instant the electron cloud can be lopsided, creating a temporary (instantaneous) dipole. That dipole distorts the electron cloud of a neighbour, inducing a dipole in it, and the two attract. This is the London dispersion force (LDF).",
+      "LDF exists in every substance. In nonpolar substances such as noble gases, halogens and hydrocarbons, it is the only intermolecular force.",
+      "Its strength depends on polarizability, how easily an electron cloud can be distorted. Bigger atoms and molecules have more electrons held farther from the nucleus, so they are more polarizable and have stronger LDF. That is why boiling points rise with molar mass: He < Ne < Ar < Kr, and at room temperature F₂ and Cl₂ are gases, Br₂ is a liquid and I₂ is a solid.",
+      "Shape matters too. Long, straight molecules have more surface contact with their neighbours than compact, branched ones, so they have stronger LDF."],
+  ex: "Rank CH₄, C₂H₆ and C₃H₈ by boiling point. All are nonpolar, so only LDF matters, and it grows with size: CH₄ (−162 °C) < C₂H₆ (−89 °C) < C₃H₈ (−42 °C).",
+  k: ["Instantaneous dipole induces a dipole in a neighbour", "Present in every substance", "Stronger with more electrons, larger molar mass and more surface area"],
+  w: "LDF is not always weak. In large molecules it can outweigh dipole–dipole forces or even hydrogen bonding (I₂ boils higher than water)." },
+ 20: { o: "Dipole–dipole forces between polar molecules, shown by comparing two molecules of the same mass.",
+  p: ["Polar molecules have permanent dipoles. Neighbouring molecules line up so that the δ⁺ end of one sits near the δ⁻ end of another, and that attraction is the dipole–dipole force. It acts in addition to LDF, never instead of it.",
+      "To see its effect, the video compares two molecules with almost the same molar mass (44 g/mol), so their LDF is similar. Propane is nonpolar and boils at −42 °C. Acetaldehyde (CH₃CHO) has a polar C=O bond and boils at about 20 °C.",
+      "The difference comes entirely from dipole–dipole forces. A boiling point measures how much energy it takes to separate molecules, so the extra attraction raises it by about 60 °C.",
+      "More polar molecules generally have stronger dipole–dipole forces."],
+  ex: "Which boils higher, dimethyl ether (CH₃OCH₃, 46 g/mol, polar) or propane (44 g/mol, nonpolar)? Similar mass, so polarity decides: dimethyl ether (−24 °C) beats propane (−42 °C).",
+  k: ["Permanent dipoles attract δ⁺ to δ⁻", "Only in polar molecules, on top of LDF", "Similar mass: the polar one boils higher"],
+  w: "Check molar masses first. Polarity only decides the comparison when the sizes are similar; a much heavier nonpolar molecule can still win on LDF." },
+ 21: { o: "Hydrogen bonding: what it needs, why it is so strong, and the boiling-point evidence.",
+  p: ["A hydrogen bond forms when H is covalently bonded to N, O or F and is attracted to a lone pair on an N, O or F atom of a nearby molecule. N, O and F are small and highly electronegative, so they strip electron density from H and leave an almost bare, very δ⁺ proton that can get very close to a neighbour's lone pair.",
+      "It is the strongest dipole–dipole interaction, but it is still an attraction between molecules, roughly a tenth or less of the strength of a covalent bond.",
+      "The video's evidence is a graph of hydride boiling points. In group 14 (CH₄, SiH₄, GeH₄, SnH₄) boiling point rises steadily with molar mass because of LDF. In groups 15, 16 and 17, the heavier hydrides follow the same rising pattern, but the first members (NH₃, H₂O and HF) boil far higher than the trend predicts, because they hydrogen bond.",
+      "Hydrogen bonding explains water's unusually high boiling point, ice floating, and the way DNA strands and proteins hold their shapes."],
+  ex: "Which of these hydrogen bond with each other: CH₃OH, CH₃F, CH₄? Only CH₃OH, because it has an O–H. In CH₃F the F is there but every H is bonded to carbon, so there is no N–H, O–H or F–H.",
+  k: ["Needs H bonded directly to N, O or F", "Plus a lone pair on N, O or F of another molecule", "NH₃, H₂O and HF boil far above their group trends"],
+  w: "A hydrogen bond is not a covalent bond to hydrogen. It is the attraction between molecules, drawn as a dashed line." },
+ 22: { o: "Predicting boiling points of organic compounds from chain length, branching and functional groups.",
+  p: ["A liquid boils when its molecules have enough energy to overcome the attractions between them, so stronger intermolecular forces mean a higher boiling point.",
+      "<b>Chain length:</b> each extra carbon adds electrons and surface area, so LDF grows. Methane −162 °C, ethane −89 °C, propane −42 °C, butane −1 °C, pentane 36 °C, hexane 69 °C.",
+      "<b>Branching:</b> branched molecules are more compact and touch their neighbours less, so LDF is weaker. The video's example is pentane (about 36 °C) against neopentane (about 9.5 °C), which have the same formula, C₅H₁₂.",
+      "<b>Functional groups:</b> at similar molar mass, polar groups add dipole–dipole forces and O–H groups add hydrogen bonding. Butane (58 g/mol) boils at −1 °C, acetone (58 g/mol, polar C=O) at 56 °C, and 1-propanol (60 g/mol, O–H) at 97 °C. Alcohols boil much higher than alkanes or ethers of the same size."],
+  ex: "Rank butane, acetone and 1-propanol (all about 58–60 g/mol) by boiling point. Butane has only LDF; acetone adds dipole–dipole; 1-propanol adds hydrogen bonding. Order: butane < acetone < 1-propanol.",
+  k: ["Longer chain → higher boiling point", "More branching → lower boiling point", "Polar groups, and especially O–H, raise boiling points"],
+  w: "Only compare functional groups between molecules of similar size. A big alkane can boil higher than a tiny alcohol." },
+ 23: { o: "Why some compounds dissolve in water and others don't: like dissolves like.",
+  p: ["Dissolving works when the new attractions between solute and solvent can make up for the attractions broken within the solute and within the solvent. That leads to the rule \"like dissolves like\".",
+      "Water is polar and hydrogen bonds, so it dissolves polar and hydrogen-bonding substances (alcohols, sugars) and ionic compounds (through ion–dipole forces). Nonpolar substances such as oils and naphthalene (the hydrocarbon in mothballs) dissolve in nonpolar solvents like hexane instead.",
+      "Many molecules have two parts. In ethanol, the –OH end is polar and hydrophilic (\"water-loving\") and can hydrogen bond with water; the carbon chain is nonpolar and hydrophobic (\"water-fearing\"). Ethanol's chain is short, so the –OH end wins and ethanol mixes with water in any amount.",
+      "As the carbon chain gets longer, the hydrophobic part takes over. Methanol, ethanol and 1-propanol mix completely with water, 1-butanol dissolves only about 8 g per 100 mL, and 1-hexanol less than 1 g."],
+  ex: "Which dissolves better in water, ethanol or hexane? Ethanol, because its –OH group hydrogen bonds with water. Hexane is nonpolar and has nothing to offer water's hydrogen bonds, so it forms a separate layer.",
+  k: ["Like dissolves like: polar with polar, nonpolar with nonpolar", "–OH and other polar groups are hydrophilic; carbon chains are hydrophobic", "Longer chains → less soluble in water"],
+  w: "Nonpolar molecules don't stay out of water because water repels them. Mixing them in would break water's hydrogen bonds without forming anything as strong in return." },
+ 24: { o: "Strategy for AP-style multiple-choice questions about which substance boils higher.",
+  p: ["A higher boiling point always means stronger intermolecular forces to overcome. Work through the question in order.",
+      "<b>1.</b> Identify each substance and list its intermolecular forces: LDF for everything; dipole–dipole if polar; hydrogen bonding if it has N–H, O–H or F–H; ionic if it is an ionic compound. <b>2.</b> If one substance has a stronger kind of force, that usually decides it. <b>3.</b> If the forces are the same kind, compare polarity (for example, a C–F bond is much more polar than C–H) and electron-cloud size (more electrons, more LDF).",
+      "<b>4.</b> Eliminate any answer that talks about breaking covalent bonds inside the molecule. Boiling only separates molecules from each other; intramolecular bonds are not broken.",
+      "Watch for distractors that misuse hydrogen bonding, such as claiming CH₃F hydrogen bonds because it contains F and H."],
+  ex: "Why does CH₃F (−78 °C) boil higher than CH₄ (−162 °C)? The polar C–F bond gives CH₃F dipole–dipole forces, and it also has more electrons (more LDF). Wrong answer to cross out: \"the C–F bond is stronger than the C–H bond\".",
+  k: ["Higher bp = stronger intermolecular forces", "Compare kinds of force first, then polarity and size", "Cross out answers about breaking covalent bonds"],
+  w: "Bond strength inside a molecule has nothing to do with boiling point. Any answer choice built on it is wrong." },
+ 25: { o: "An AP free-response question: explaining why ethanol dissolves in water but ethene doesn't.",
+  p: ["In the experiment, ethanol is heated with a catalyst and dehydrates to ethene gas plus water. The gas coming off contains ethene and some unreacted ethanol vapor, and it is bubbled through water.",
+      "Ethanol dissolves in the water, because its –OH group forms hydrogen bonds with water molecules (ethanol–water attractions as strong as the water–water ones). Ethene is nonpolar, with only London dispersion forces, so it cannot attract water strongly. It does not dissolve and bubbles out to be collected.",
+      "A model answer names the specific attraction between the solute and water: \"Ethanol is polar and forms hydrogen bonds with water, so it is soluble; ethene is nonpolar and can only form weak dispersion attractions with water, so it is not.\""],
+  ex: "Predict which gas would dissolve better in water, NH₃ or CH₄. NH₃, because its N–H bonds and lone pair let it hydrogen bond with water. CH₄ is nonpolar.",
+  k: ["Explain solubility with solute–water attractions", "Ethanol hydrogen bonds with water; ethene is nonpolar", "Name both the force and the particles involved"],
+  w: "Say what attracts what. \"Ethanol forms hydrogen bonds with water molecules\" earns credit; \"ethanol has hydrogen bonds\" is too vague." }
 };
 const VDAYS = [
  ["v1111", "Wed, Nov 11", "Lewis symbols, ionic bonding & electronegativity", 1, [1,2,3,4,5], "notes-ch1"],
@@ -1713,8 +1893,13 @@ const VDAYS = [
     const list = nums.map(n => VIDEOS[n - 1]), mins = Math.round(list.reduce((a, v) => a + secs(v[2]), 0) / 60);
     return `<details class="vgroup" id="videos-${id}" ${id === openV ? "open" : ""}><summary class="${ch ? "f" + ch : "fink"}"><div><span class="vdate">${date}</span><h2>${esc(title)}</h2></div>
       <span class="vmeta"><span>${list.length} video${list.length > 1 ? "s" : ""} · ${mins} minutes</span><a href="#${notes}">${notes === "sheet" ? "Cheat sheet" : "Notes for this day"}</a></span><span class="chev" aria-hidden="true"></span></summary>
-      <div class="vlist">${list.map(v => { const [sum, keys] = VSUM[v[0]]; return `<article class="vitem ${w[v[0]] ? "watched" : ""}"><span class="n tnum">${v[0]}</span><div><h3>${esc(v[1])}</h3>
-        <p class="vsum">${esc(sum)}</p><ul class="vkey">${keys.map(k => `<li>${esc(k)}</li>`).join("")}</ul>
+      <div class="vlist">${list.map(v => { const n = VSUM[v[0]]; return `<article class="vitem ${w[v[0]] ? "watched" : ""}"><span class="n tnum">${v[0]}</span><div>
+        <details class="vdet"><summary><div><h3>${esc(v[1])}</h3><p class="vsum">${esc(n.o)}</p><span class="vopen">Read the full notes</span></div><span class="chev" aria-hidden="true"></span></summary>
+        <div class="vnotes">${n.p.map(x => `<p>${x}</p>`).join("")}
+          <div class="vex"><h4>Worked example</h4><p>${esc(n.ex)}</p></div>
+          <div><h4>Remember</h4><ul class="vkey">${n.k.map(k => `<li>${esc(k)}</li>`).join("")}</ul></div>
+          <div class="vwarn"><h4>Common mistake</h4><p>${esc(n.w)}</p></div>
+        </div></details>
         <div class="vrow"><a href="https://youtu.be/${v[3]}" target="_blank" rel="noopener">Watch on YouTube (${v[2]})</a><label><input type="checkbox" data-vid="${v[0]}" ${w[v[0]] ? "checked" : ""}> Watched</label></div></div></article>`; }).join("")}</div></details>`;
   }).join("");
 })();
